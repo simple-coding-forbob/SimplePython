@@ -14,6 +14,10 @@ for i in range(0,5,1):
 for i in range(5):
     print(i)
 
+for _ in range(5):
+    print("*", end="")
+
+print()
 # 인덱스번호를 이용해서 표시하기
 # len(배열): 길이
 d=[2,3,4]
