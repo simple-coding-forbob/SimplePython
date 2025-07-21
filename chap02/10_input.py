@@ -19,12 +19,14 @@ print(c)
 d=input().split()
 print(d)
 
-# 2단어 입력:
+# 2단어 입력: a b
 # e,f 각 변수에 넣기
 e,f=input().split()
 print(e)
 print(f)
 
+# 홍길동
+# 20
 # 변수를 입력 받고 화면에 표시하기
 g=input()
 h=int(input())
