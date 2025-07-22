@@ -7,6 +7,8 @@ while True:
         break
     i+=1
 
+print()
+
 # 홀수만 표시하기
 a=[1,2,3,4]
 for i in a:

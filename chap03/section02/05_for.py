@@ -4,10 +4,7 @@ for i in a:
     for j in i:
         print(j)
 
-b=[["a","b"],["c","d"]]
-for i in b:
-    for j in i:
-        print(j)
+print()
 
 # 인덱스 번호를 이용해서 표시하기
 c=[[2,3],[4,5]]

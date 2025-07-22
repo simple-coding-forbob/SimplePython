@@ -2,12 +2,10 @@
 a=[1,2,3]
 i=0
 while i < len(a):
-    print(i)
+    print(a[i])
+    i+=1
 
-b="abc"
-i=0
-while i < len(b):
-    print(i)
+print()
 
 i=0
 while i < 5:
