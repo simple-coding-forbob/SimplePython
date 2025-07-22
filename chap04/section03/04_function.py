@@ -8,7 +8,7 @@ def hi():
 hi()
 
 # 2) 매개변수 사용: 홍길동
-def hi(name):
+def hello(name):
     print(f"{name} 님")
 
 hi("홍길동")

@@ -9,12 +9,3 @@ print(a)
 # 삭제
 a.remove("c")
 print(a)
-
-a={"c","d"}
-b={"d","e"}
-# 합집합
-print(a | b)
-# 교집합
-print(a & b)
-# 차집합
-print(a - b)

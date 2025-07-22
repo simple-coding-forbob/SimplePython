@@ -1,13 +1,13 @@
 # 집합표현입니다. 중복이 제거됩니다.
-a={1,2,3,3}
+a={1,2,2}
 print(a)
 
 # 추가
-a.add(4)
+a.add(3)
 print(a)
 
 # 삭제
-a.remove(4)
+a.remove(3)
 print(a)
 
 b={1,2}
