@@ -15,5 +15,5 @@ result = soup.select("a") # 결과 중 첫번째만 가져오기
 # print(result)   # 디버깅 확인
 for i in result:
     # i.get(속성): html 속성값
-    if i.get("href")!=None:    # 있을 때만 처리 예) <a>글자</a> 이 경우 제외
+    if i.get("href")!=None:    # href 속성 있을 때만 처리 예) <a>글자</a> 이 경우 제외
         print(i.get("href"))
