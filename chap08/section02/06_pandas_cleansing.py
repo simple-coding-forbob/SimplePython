@@ -9,7 +9,9 @@ data = {
 # 데이터 프레임 생성
 df = pd.DataFrame(data)
 
-# 결측값을 0으로 대체
-df_filled = df.fillna(0)
-print(df_filled)
+# 결측값이 있는 행 삭제
+df_cleaned = df.dropna()
+# 결측값이 있는 열 삭제
+df_cleaned = df.dropna(axis=1)
+print(df_cleaned)
 
