@@ -18,7 +18,7 @@ driver.find_element(By.ID, "password").send_keys("admin")
 # 로그인 버튼(input[type="submit"]) 클릭
 driver.find_element(By.CSS_SELECTOR, 'input[type="submit"]').click()
 
-# 로그인 결과 확인
+# 로그인 결과 확인, 1초 지연
 time.sleep(1)
 print("현재 URL:", driver.current_url)
 

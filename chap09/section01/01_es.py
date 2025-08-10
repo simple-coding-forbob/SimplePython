@@ -15,6 +15,7 @@ doc = {
     "author": "홍길동",
     "year": 2024
 }
+
 es.index(index="books", id=1, document=doc)
 
 # 2) 검색

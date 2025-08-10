@@ -25,7 +25,7 @@ def get():
 # ✅ CREATE (책 추가)
 @app.route('/books/add', methods=['POST'])
 def insert():
-    data = request.get_json()                   # json 데이터 받기
+    data = request.json                   # json 데이터 받기
     app.logger.info(data)
     return '',200
 
@@ -33,7 +33,7 @@ def insert():
 @app.route('/books/edit', methods=['PUT'])
 def update():
     id = request.args.get('id', type=int)  # 쿼리스트링에서 id 받아오기
-    data = request.get_json()
+    data = request.json
     app.logger.info(f"id: {id}, data: {data}")
     return '',200
 
