@@ -24,7 +24,7 @@ driver.find_element(By.CSS_SELECTOR, 'input[type="submit"]').click()
 time.sleep(1)
 print("현재 URL:", driver.current_url)
 
-# 로그인 후 첫 페이지에 나오는 상품명 중에 T-Shirt 또는 Backpack 표시
+# 로그인 후 첫 페이지에 나오는 상품 이미지를 다운로드
 t=driver.find_elements(By.CSS_SELECTOR, ".inventory_item_img")
 for i in range(len(t)):
     img = t[i].get_attribute("src")  # 이미지 인터넷 주소 만들기
