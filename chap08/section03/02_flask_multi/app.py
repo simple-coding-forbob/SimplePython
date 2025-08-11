@@ -1,6 +1,6 @@
 from flask import Flask
-from dept_route import bp as dept
-from dept2_route import bp as dept2
+from dept_route import dept
+from dept2_route import dept2
 
 app = Flask(__name__)
 
