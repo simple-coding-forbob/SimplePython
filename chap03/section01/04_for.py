@@ -11,7 +11,7 @@ for i in b:
 
 print()
 
-# range(시작(생략),끝,간격(생략))
+# range(시작(생략),끝+1,간격(생략))
 for i in range(0,5,1):
     print(i)
 
