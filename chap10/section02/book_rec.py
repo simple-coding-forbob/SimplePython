@@ -1,4 +1,4 @@
-from flask import Blueprint, request, jsonify, Response
+from flask import Blueprint, request, jsonify
 import logging
 import rec
 
@@ -14,7 +14,7 @@ def get():
         return jsonify({"에러": "유저가 없습니다."}), 400
 
     try:
-        recommend=rec.recommend(user)
+        recommend= rec.recommend(user)
         return jsonify({"user": user, "recommend": recommend})
     except Exception as e:
         logging.error(e)
