@@ -1,10 +1,10 @@
 from flask import Blueprint, jsonify
 
 # __name__ : 현재 파일의 이름
-bp = Blueprint("dept2", __name__)
+dept2 = Blueprint("dept2", __name__)
 
 # ✅ READ (전체 조회)
-@bp.route('/dept2', methods=['GET'])
+@dept2.route('/dept2', methods=['GET'])
 def getAll():
     # DB가 없으므로 가라데이터 return
     depts = [

@@ -1,10 +1,6 @@
 from flask import Flask, request, jsonify
-import logging
 
 app = Flask(__name__)
-
-# 로그 설정
-logging.basicConfig(level=logging.INFO)
 
 # ✅ READ (전체 조회)
 @app.route('/books', methods=['GET'])

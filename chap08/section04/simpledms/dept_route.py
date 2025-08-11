@@ -1,22 +1,42 @@
 from flask import Blueprint, request, jsonify, Response
-from config import db
-from dept import Dept
+from elasticsearch import Elasticsearch
+import time
 
-# __name__ : 현재 파일의 이름
+# ES 연결
+es = Elasticsearch(
+    ["https://localhost:9200"],
+    basic_auth=("elastic", "=U5oxindf+JStU2U25mT"),
+    verify_certs=False
+)
+INDEX_NAME = "department"
+
 bp = Blueprint("dept", __name__)
 
-# LIKE 검색 (dname 기준, SQL 직접 실행)
+# match 검색 (dname 기준, 검색어 없으면 전체 검색)
 @bp.route("/dept/search", methods=["GET"])
 def select_all():
-    keyword = request.args.get("keyword", "")
-    like_pattern = f"%{keyword}%"
+    keyword = request.args.get("keyword", "").strip()
+    body = search_keyword(keyword)
+    result = es.search(index=INDEX_NAME, body=body)
+    return jsonify(make_dept(result))
 
-    sql = "SELECT * FROM TB_DEPT WHERE dname LIKE :pattern"
-    result = db.engine.execute(sql, {"pattern": like_pattern})
+def search_keyword(keyword: str):
+    # 검색어에 맞는 Elasticsearch 쿼리 생성
+    query = {"match_all": {}} if not keyword else {"match_phrase": {"dname": keyword}}
+    return {"query": query}
 
-    depts = [{"dno": row[0], "dname": row[1], "loc": row[2]} for row in result]
-    return jsonify(depts)
+def make_dept(result):
+    # ES 검색 결과를 부서 리스트로 변환
+    return [
+        {
+            "dno": hit["_source"].get("dno"),
+            "dname": hit["_source"].get("dname"),
+            "loc": hit["_source"].get("loc"),
+        }
+        for hit in result["hits"]["hits"]
+    ]
 
+# 참고)
 # CREATE
 @bp.route("/dept", methods=["POST"])
 def insert():
@@ -27,49 +47,37 @@ def insert():
     if not dname or not loc:
         return jsonify({"error": "dname and loc are required"}), 400
 
-    # 시퀀스 활용하여 dno 수동 할당
-    seq_sql = "SELECT DEPARTMENT_SEQ.NEXTVAL FROM DUAL"
-    seq_result = db.engine.execute(seq_sql)
-    dno = seq_result.fetchone()[0]
+    # dno는 유일한 값 넣기: 시간 정수부분 넣기
+    dno = int(time.time())
 
-    dept = Dept(dno=dno, dname=dname, loc=loc)
-    db.session.add(dept)
-    db.session.commit()
+    dept = {"dno": dno, "dname": dname, "loc": loc}
+    es.index(index=INDEX_NAME, id=dno, document=dept)
     return Response(status=201)
 
 # UPDATE
 @bp.route("/dept", methods=["PUT"])
 def update():
-    dno = request.args.get("dno", type=int)
-    if dno is None:
+    dno = request.args.get("dno")
+    if not dno:
         return jsonify({"error": "dno query parameter is required"}), 400
 
-    data = request.json
-    dname = data.get("dname")
-    loc = data.get("loc")
-
-    dept = Dept.query.get(dno)
-    if not dept:
+    # 기존 문서 확인
+    if not es.exists(index=INDEX_NAME, id=dno):
         return jsonify({"error": "Dept not found"}), 404
 
-    if dname is not None:
-        dept.dname = dname
-    if loc is not None:
-        dept.loc = loc
-
-    db.session.commit()
+    data = request.json
+    es.update(index=INDEX_NAME, id=dno, doc={"doc": data})
     return Response(status=200)
 
 # DELETE
 @bp.route("/dept", methods=["DELETE"])
 def delete():
-    dno = request.args.get("dno", type=int)
-    if dno is None:
+    dno = request.args.get("dno")
+    if not dno:
         return jsonify({"error": "dno query parameter is required"}), 400
 
-    dept = Dept.query.get(dno)
-    if not dept:
+    if not es.exists(index=INDEX_NAME, id=dno):
         return jsonify({"error": "Dept not found"}), 404
-    db.session.delete(dept)
-    db.session.commit()
+
+    es.delete(index=INDEX_NAME, id=dno)
     return Response(status=200)
