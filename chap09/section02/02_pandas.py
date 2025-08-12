@@ -17,5 +17,5 @@ print(df['나이'])
 print()
 
 # 첫 번째 행 선택
-print(df.iloc[0])
+print(df.loc[0])
 print()
