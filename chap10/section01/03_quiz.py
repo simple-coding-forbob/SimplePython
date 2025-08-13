@@ -21,6 +21,5 @@ df = pd.DataFrame(data)
 # 3️⃣ 전체 조회
 print(df)
 
-
 # 인덱스 번호 조회
 print(list(df.index))
