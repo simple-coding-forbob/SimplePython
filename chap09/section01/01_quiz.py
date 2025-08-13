@@ -1,7 +1,23 @@
-import numpy as np
+# 1)
+def myprint2():
+    print("안녕")
+myprint2()
 
-a = np.array([10, 20])
-print(a)
+myprint = lambda : print("안녕")
+myprint()      # 출력: 16
 
-b = np.array([[10,20],[30,40]])
-print(b)
+# 2)
+def myhello2(x):
+    print(x)
+myhello2("hello")
+
+myhello2 = lambda x: print(x)
+myhello2("hello")
+
+# 3)
+def square2(x):
+    return x**2
+print(square2(4))
+
+square2 = lambda x: x**2
+print(square2(4))          # 출력: 16
