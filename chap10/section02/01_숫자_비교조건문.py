@@ -2,7 +2,7 @@ import pandas as pd
 from dept import dept_data
 from emp import emp_data
 
-# 1️⃣ EMPLOYEE 데이터 (앞 8명 예시)
+# 1️⃣ DEPARTMENT , EMPLOYEE 데이터
 df = pd.DataFrame(dept_data)
 df = pd.DataFrame(emp_data)
 
