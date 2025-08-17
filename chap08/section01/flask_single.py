@@ -23,7 +23,7 @@ def get():
 def insert():
     data = request.json                   # json 데이터 받기
     app.logger.info(data)
-    return '',200
+    return '추가',200
 
 # ✅ UPDATE (책 제목 수정)
 @app.route('/books/edit', methods=['PUT'])
@@ -31,14 +31,14 @@ def update():
     id = request.args.get('id', type=int)  # 쿼리스트링에서 id 받아오기
     data = request.json
     app.logger.info(f"id: {id}, data: {data}")
-    return '',200
+    return '수정',200
 
 # ✅ DELETE (책 삭제)
 @app.route('/books/delete', methods=['DELETE'])
 def delete_book():
     id = request.args.get('id', type=int)  # 쿼리스트링에서 id 받아오기
     app.logger.info(id)
-    return '',200
+    return '삭제',200
 
 if __name__ == '__main__':
     # TODO: 파이썬 내장 서버 사용(Tomcat 과 비슷)

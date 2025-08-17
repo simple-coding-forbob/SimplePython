@@ -18,7 +18,6 @@ data = {
 # 2️⃣ DataFrame 생성
 df = pd.DataFrame(data)
 
-# 3️⃣ 부서명 컬럼만 조회
-print(df["ENAME"])        # 시리즈 형태(1차원 배열, 컬럼명없음)
+# 3️⃣ 사원명 컬럼만 조회
 print(df[["ENAME"]])      # 데이터프레임 형태(2차원 배열, 컬럼명있음)
 print(df[["ENAME", "JOB"]])
