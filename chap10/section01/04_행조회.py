@@ -31,4 +31,4 @@ print("\n")
 # === 5️⃣ 여러 행과 컬럼 선택 ===
 # 0~2행, DNAME 컬럼만
 print("0:1행, DNAME 컬럼만 조회:")
-print(df.loc[0:1, 'DNAME'])
+print(df.loc[0:1, ['DNAME','LOC']])
