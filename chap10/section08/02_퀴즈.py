@@ -4,7 +4,7 @@ from emp import emp_data
 df_emp = pd.DataFrame(emp_data)
 print(df_emp)
 
-# pivot_table: 부서별 직무별 총 급여
+# pivot_table: 부서(인덱스) 직무(필드) 급여(값), 집계(합)
 pivot_emp = pd.pivot_table(
     df_emp,
     index="DNO",          # 행: 부서번호

@@ -2,7 +2,7 @@ import pandas as pd
 
 # 예제 데이터
 data = {
-    "TEXT": ["  Oracle DB  ", "  Hello World  ", "  Python  "]
+    "TEXT": ["  Hello World  ", "  Python  "]
 }
 
 df = pd.DataFrame(data)

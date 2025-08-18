@@ -6,10 +6,10 @@ from emp import emp_data
 dept_df = pd.DataFrame(dept_data)
 emp_df = pd.DataFrame(emp_data)
 
-# 1. 'ACCOUNTING' 부서 번호(DNO) 조회
+# 1. 'ACCOUNTING' 의 부서 번호(DNO) 조회
 sales_dno_list = dept_df.loc[dept_df['DNAME'] == 'ACCOUNTING', 'DNO']
 
-# 2. 사원 중 DNO가 SALES 부서에 포함된 ENAME, SALARY 조회
+# 2. DNO가ACCOUNTING 인 사원의 ENAME, SALARY 조회
 result = emp_df.loc[emp_df['DNO'].isin(sales_dno_list),['ENAME', 'SALARY']]
 
 print(result)
