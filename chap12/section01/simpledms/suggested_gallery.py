@@ -1,14 +1,13 @@
-from elasticsearch import Elasticsearch
 import pandas as pd
 from sklearn.neighbors import NearestNeighbors
-from scipy.sparse import csr_matrix
+from elasticsearch import Elasticsearch
 from datetime import datetime
 
 # === 1) Elasticsearch 연결 ===
 es = Elasticsearch(
-    ["https://localhost:9200"],
-    basic_auth=("elastic", "=U5oxindf+JStU2U25mT"),
-    verify_certs=False
+    ["http://localhost:9200"]
+    # basic_auth=("계정", "암호"),
+    # verify_certs=False
 )
 INDEX_SRC = "gallery-likes"
 INDEX_REC = "gallery-likes-suggested"
@@ -35,50 +34,47 @@ for hit in res['hits']['hits']:
 
 df = pd.DataFrame(data)
 
-# === 4) 사용자-파일 행렬 생성 ===
-matrix = df.pivot_table(index='email', columns='gallery_title', values='like_count', fill_value=0)
+# 4) 사용자-책 행렬
+mx = df.pivot_table(index='email', columns='gallery_title', values='like_count', fill_value=0)
 
-# === 5) Sparse Matrix 변환 ===
-sparse_matrix = csr_matrix(matrix.values)
-
-# === 6) KNN 모델 학습 ===
+# 5) KNN 모델 학습
 model = NearestNeighbors(metric='cosine', algorithm='brute')
-model.fit(sparse_matrix)
+model.fit(mx.values)
 
-# === 7) 사용자별 추천 계산 및 새로운 인덱스에 저장 ===
-top_n = 2
-for user in matrix.index:
-    user_idx = matrix.index.get_loc(user)
-    target_vector = sparse_matrix[user_idx]
+# 6) Top-N 추천 함수
+def rec_user(user_email, top_n=2):
+    user_idx = mx.index.get_loc(user_email)
+    tfeature = mx.to_numpy()[user_idx].reshape(1, -1)
 
-    n_neighbors = min(4, len(matrix))  # 데이터 수보다 많으면 에러
-    distances, indices = model.kneighbors(target_vector, n_neighbors=n_neighbors)
+    # 유사 사용자 찾기
+    dt, inx = model.kneighbors(tfeature, n_neighbors=mx.shape[0])
+    similar_idx = [i for i in inx.flatten() if i != user_idx]
+    similar_users = [mx.index[i] for i in similar_idx]
 
-    similar_idx = [i for i in indices.flatten() if i != user_idx]
-    similar_users = [matrix.index[i] for i in similar_idx]
+    # 내가 이미 좋아요한 타이틀
+    my_likes = df.loc[df['email'] == user_email, 'gallery_title'].tolist()
 
-    recommend_scores = {}
-    for title in matrix.columns:
-        if matrix.loc[user, title] == 0:
-            score = matrix.loc[similar_users, title].sum() if similar_users else 0
-            if score > 0:
-                recommend_scores[title] = score
+    # 비슷한 사용자들이 좋아한 타이틀 합산
+    rec_sum = (
+        df[df['email'].isin(similar_users) & ~df['gallery_title'].isin(my_likes)]
+          .groupby('gallery_title')['like_count'].sum()
+    )
 
-    # Top-N 추천 선택
-    sorted_recs = sorted(recommend_scores.items(), key=lambda x: x[1], reverse=True)[:top_n]
-    suggested_list = [title for title, _ in sorted_recs]
+    # Top-N 선택
+    top_rec = rec_sum.sort_values(ascending=False).head(top_n)
+    return top_rec.index.tolist()  # 추천 제목 리스트 반환
 
-    # === 8) Elasticsearch 추천 인덱스에 업데이트/추가 ===
-    if suggested_list:                           # 있을때만 es 에 넣기
-        # 이미 존재하면 update, 없으면 새로 index
-        es.index(
-            index=INDEX_REC,
-            id=user,  # 사용자 이메일을 고유 ID로
-            document={
-                "email": user,
-                "suggested": suggested_list,
-                "update_time": datetime.now()
-            }
-        )
+# 7) 모든 사용자에 대해 추천 → Elasticsearch 저장
+for user in mx.index:
+    slist = rec_user(user, top_n=2)
+    print(f"사용자 {user} 추천: {slist}")
 
-    print(f"사용자 {user} 추천 완료: {suggested_list if suggested_list else '추천 없음'}")
+    es.index(
+        index=INDEX_REC,
+        id=user,  # 사용자 이메일을 고유 ID로
+        document={
+            "email": user,
+            "suggested": slist,
+            "update_time": datetime.now()
+        }
+    )
