@@ -1,7 +1,7 @@
 import pandas as pd
 from emp import emp_data
 
-# 1️⃣ EMPLOYEE 데이터 (앞 8명 예시)
+# 1️⃣ EMPLOYEE 데이터
 df = pd.DataFrame(emp_data)
 
 # DNO가 10 또는 20인 행 필터링

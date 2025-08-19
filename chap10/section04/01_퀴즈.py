@@ -5,12 +5,12 @@ from emp import emp_data
 df = pd.DataFrame(emp_data)
 
 # 대문자 변환
-df["ENAME_UPPER"] = df["ENAME"].str.upper()
+df["대문자"] = df["JOB"].str.upper()
 
 # 소문자 변환
-df["ENAME_LOWER"] = df["ENAME"].str.lower()
+df["소문자"] = df["JOB"].str.lower()
 
 # 첫 글자만 대문자 (INITCAP)
-df["ENAME_INITCAP"] = df["ENAME"].str.title()
+df["첫대문자"] = df["JOB"].str.title()
 
-print(df[["ENAME_UPPER", "ENAME_LOWER", "ENAME_INITCAP"]])
+print(df[["대문자", "소문자", "첫대문자"]])
