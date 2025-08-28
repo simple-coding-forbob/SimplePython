@@ -9,4 +9,4 @@ df = pd.DataFrame(data)
 # 양쪽 공백 제거 (TRIM)
 df["TRIM"] = df["TEXT"].str.strip()
 
-print(df)
+print(df["TRIM"])

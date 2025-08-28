@@ -8,6 +8,6 @@ df = pd.DataFrame(emp_data)
 grouped = df.groupby("DNO")["SALARY"].max().reset_index()
 
 # HAVING 조건 (최고 급여가 3000 이상인 부서만 필터링)
-result = grouped[grouped["SALARY"] >= 3000]
+result = grouped.loc[grouped["SALARY"] >= 3000]
 
 print(result)

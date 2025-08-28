@@ -5,7 +5,7 @@ from emp import emp_data
 df = pd.DataFrame(emp_data)
 
 # ENAME 문자열 길이 구하기
-df["ENAME_LENGTH"] = df["ENAME"].str.len()
+df["JOB_LENGTH"] = df["JOB"].str.len()
 
 # ENAME, 길이 출력
-print(df[["ENAME", "ENAME_LENGTH"]])
+print(df[["JOB", "JOB_LENGTH"]])
