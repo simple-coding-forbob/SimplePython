@@ -5,6 +5,6 @@ from emp import emp_data
 df = pd.DataFrame(emp_data)
 
 # ENAME 첫 2글자 추출
-df["FIRST_2_CHARS"] = df["ENAME"].str[0:2]
+df["FIRST_2_CHARS"] = df["JOB"].str[0:2]
 
-print(df[["ENAME", "FIRST_2_CHARS"]])
+print(df[["JOB", "FIRST_2_CHARS"]])

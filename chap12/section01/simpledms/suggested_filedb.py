@@ -9,12 +9,10 @@ es = Elasticsearch(
     # basic_auth=("계정", "암호"),
     # verify_certs=False
 )
-INDEX_SRC = "filedb-likes"
-INDEX_REC = "filedb-likes-suggested"
 
 # === 2) 원본 데이터 가져오기 ===
 res = es.search(
-    index=INDEX_SRC,
+    index="filedb-likes",
     body={
         "size": 10000,
         "_source": ["email", "file_title", "like_count"]
@@ -70,7 +68,7 @@ for user in mx.index:
     print(f"사용자 {user} 추천: {slist}")
 
     es.index(
-        index=INDEX_REC,
+        index="filedb-likes-suggested",
         id=user,  # 사용자 이메일을 고유 ID로
         document={
             "email": user,

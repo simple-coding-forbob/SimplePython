@@ -7,6 +7,6 @@ dept_df = pd.DataFrame(dept_data)
 emp_df = pd.DataFrame(emp_data)
 
 # 두 데이터프레임을 행 방향으로 합치기 (UNION ALL)
-result = pd.concat([dept_df[['DNO']], emp_df[['DNO']]])
+result = pd.concat([dept_df['DNO'], emp_df['DNO']])
 
 print(result)

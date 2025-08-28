@@ -9,6 +9,6 @@ data = {
 df = pd.DataFrame(data)
 
 # 소수점 이하 내림
-df["FLOOR"] = np.floor(df["NUM"])
+df["내림"] = np.floor(df["NUM"])
 
 print(df)

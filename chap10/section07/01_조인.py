@@ -10,6 +10,6 @@ emp_df = pd.DataFrame(emp_data)
 merged_df = pd.merge(emp_df, dept_df, on='DNO', how='inner')
 
 # 2. 사원번호(ENO)가 7788인 행만 필터
-result_df = merged_df[merged_df['ENO'] == 7788]
+result_df = merged_df.loc[merged_df['ENO'] == 7788]
 
 print(result_df)
